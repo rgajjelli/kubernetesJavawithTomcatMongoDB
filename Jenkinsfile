@@ -13,16 +13,14 @@ pipeline {
                           checkout scm
                          }
               }
-              stage ('mvn-compile.1') {
-                      steps {
-                              sh 'mvn clean compile'
-                      }
+
+              def mvn_version = 'M3'
+              withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
+                sh "mvn clean package"
+                sh "mvn install"
               }
-              stage ('mvn-build.2') {
-                      steps {
-                              sh 'mvn install'
-                      }
-              }
+
+
               stage('docker-build.3') {
                   agent any
                     steps {
