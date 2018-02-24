@@ -15,16 +15,12 @@ pipeline {
               }
               stage ('mvn-compile.1') {
                       steps {
-                          withMaven(maven : 'maven_3_5_2') {
                               sh 'mvn clean compile'
-                          }
                       }
               }
               stage ('mvn-build.2') {
                       steps {
-                          withMaven(maven : 'maven_3_5_2') {
                               sh 'mvn install'
-                          }
                       }
               }
               stage('docker-build.3') {
