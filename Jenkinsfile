@@ -13,24 +13,22 @@ pipeline {
 
     stages {
 
-              stage ('Initialize') {
+            stage ('Initialize') {
                   steps {
                           echo "PATH = %PATH%"
                           echo "M2_HOME = %M2_HOME%"
                   }
-                }
-
+            }
             stage ('cehckoutscm') {
                      steps {
                           checkout scm
                          }
-              }
-
-              stage ('maven-build') {
-                  sh "mvn clean install"
-                }
-
-
+            }
+            stage ('maven-build') {
+                    steps {
+                          sh "mvn clean install"
+                          }
+            }
             stage('docker-build.3') {
                   agent any
                     steps {
