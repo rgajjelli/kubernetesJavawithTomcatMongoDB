@@ -47,6 +47,7 @@ pipeline {
                                 TAG = env.BRANCH_NAME
                                }
                                  sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD}"
+                                 sh "docker tag ${IMAGE} ${env.USERNAME}/${IMAGE}
                                  sh "docker push ${env.USERNAME}/${IMAGE}"
                                  echo "Image push complete."
                              }
