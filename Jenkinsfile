@@ -8,14 +8,14 @@ pipeline {
 
     stages {
 
+
             stage ('cehckoutscm') {
                      steps {
                           checkout scm
                          }
               }
 
-
-              stage ('cehckoutscm') {
+              stage ('maven-build') {
                  String jdkName = jenkinsEnv.jdkFromVersion(buildOs, buildJdk)
                  String mvnName = jenkinsEnv.mvnFromVersion(buildOs, buildMvn)
                  withMaven(jdk: jdkName, maven: mvnName, mavenLocalRepo:"${WORK_DIR}/.repository", options:[
