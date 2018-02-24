@@ -8,20 +8,33 @@ pipeline {
 
     stages {
 
-              stage ('cehckoutscm') {
+            stage ('cehckoutscm') {
                      steps {
                           checkout scm
                          }
               }
 
-              def mvn_version = 'M3'
-              withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
-                sh "mvn clean package"
-                sh "mvn install"
-              }
+
+              stage ('cehckoutscm') {
+                 String jdkName = jenkinsEnv.jdkFromVersion(buildOs, buildJdk)
+                 String mvnName = jenkinsEnv.mvnFromVersion(buildOs, buildMvn)
+                 withMaven(jdk: jdkName, maven: mvnName, mavenLocalRepo:"${WORK_DIR}/.repository", options:[
+                 artifactsPublisher(disabled: false),
+                 junitPublisher(ignoreAttachments: false),
+                 findbugsPublisher(disabled: false),
+                 openTasksPublisher(disabled: false),
+                 dependenciesFingerprintPublisher(),
+                 invokerPublisher(),
+                 pipelineGraphPublisher()
+                 ]) {
+                     sh "mvn clean verify -B -U -e -fae -V -Dmaven.test.failure.ignore=true"
+                     sh "mvn clean package"
+                     sh "mvn install"
+                     }
+                }
 
 
-              stage('docker-build.3') {
+            stage('docker-build.3') {
                   agent any
                     steps {
                         script {
