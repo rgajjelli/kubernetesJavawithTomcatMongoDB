@@ -13,17 +13,6 @@ pipeline {
 
     stages {
 
-            stage ('Initialize') {
-                  steps {
-                          echo "PATH = %PATH%"
-                          echo "M2_HOME = %M2_HOME%"
-                  }
-            }
-            stage ('cehckoutscm') {
-                     steps {
-                          checkout scm
-                         }
-            }
             stage ('maven-build') {
                     steps {
                           sh "mvn clean install"
@@ -44,19 +33,7 @@ pipeline {
                         }
                     }
               }
-              stage('docker-compose:start-local.4') {
-                 agent any
-                   steps {
-                     sh 'docker-compose -f docker-compose.yml up'
 
-                   }
-              }
-              stage('docker-compose:down-local.4') {
-                   agent any
-                     steps {
-                       sh 'docker-compose -f docker-compose.yml down'
-                     }
-              }
               stage('push-dockerhub.6'){
                   steps {
                      withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -76,6 +53,20 @@ pipeline {
                              }
                            }
                      }
+            }
+
+            stage('docker-compose:test-local.4') {
+               agent any
+                 steps {
+                   sh 'docker-compose -f docker-compose.yml up'
+
+                 }
+            }
+            stage('docker-compose:down-local.4') {
+                 agent any
+                   steps {
+                     sh 'docker-compose -f docker-compose.yml down'
+                   }
             }
       }
 }
