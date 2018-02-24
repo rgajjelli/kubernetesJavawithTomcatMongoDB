@@ -9,12 +9,10 @@ pipeline {
     stages {
 
               stage ('cehckoutscm') {
-                   steps {
-                        checkout scm
-                       }
-                   }
-               }
-
+                     steps {
+                          checkout scm
+                         }
+              }
               stage ('mvn-compile.1') {
                       steps {
                           withMaven(maven : 'maven_3_5_2') {
@@ -22,7 +20,6 @@ pipeline {
                           }
                       }
               }
-
               stage ('mvn-build.2') {
                       steps {
                           withMaven(maven : 'maven_3_5_2') {
@@ -30,7 +27,6 @@ pipeline {
                           }
                       }
               }
-
               stage('docker-build.3') {
                   agent any
                     steps {
@@ -46,7 +42,6 @@ pipeline {
                         }
                     }
               }
-
               stage('docker-compose:start-local.4') {
                  agent any
                    steps {
@@ -54,15 +49,13 @@ pipeline {
 
                    }
               }
-
               stage('docker-compose:down-local.4') {
                    agent any
                      steps {
                        sh 'docker-compose -f docker-compose.yml down'
                      }
               }
-
-             stage('push-dockerhub.6'){
+              stage('push-dockerhub.6'){
                   steps {
                      withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 
