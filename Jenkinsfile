@@ -16,8 +16,8 @@ pipeline {
               }
 
               stage ('maven-build') {
-                 String jdkName = jenkinsEnv.jdkFromVersion(buildOs, buildJdk)
-                 String mvnName = jenkinsEnv.mvnFromVersion(buildOs, buildMvn)
+                 String jdkName = jenkinsEnv.jdkFromVersion(buildOs, Jenkins-Master-JDK18)
+                 String mvnName = jenkinsEnv.mvnFromVersion(buildOs, Jenkins-master-MAVEN)
                  withMaven(jdk: jdkName, maven: mvnName, mavenLocalRepo:"${WORK_DIR}/.repository", options:[
                  artifactsPublisher(disabled: false),
                  junitPublisher(ignoreAttachments: false),
