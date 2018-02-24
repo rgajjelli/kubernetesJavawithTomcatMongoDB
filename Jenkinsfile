@@ -2,12 +2,23 @@ pipeline {
 
     agent any
 
+    tools {
+            maven 'maven3'
+            jdk 'java8'
+    }
+
     environment {
        IMAGE = "gajjelli/kuberneteswithtomcatmongodb"
      }
 
     stages {
 
+              stage ('Initialize') {
+                  steps {
+                          echo "PATH = %PATH%"
+                          echo "M2_HOME = %M2_HOME%"
+                  }
+                }
 
             stage ('cehckoutscm') {
                      steps {
@@ -16,9 +27,7 @@ pipeline {
               }
 
               stage ('maven-build') {
-                def mvnHome = tool 'maven-3'
-                stash 'working-copy'
-                sh "${mvnHome}/bin/mvn clean install"
+                  sh "mvn clean install"
                 }
 
 
