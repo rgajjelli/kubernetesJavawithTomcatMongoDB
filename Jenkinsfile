@@ -13,12 +13,12 @@ pipeline {
 
     stages {
 
-            stage ('maven-build') {
+            stage ('maven-build:1') {
                     steps {
                           sh "mvn clean install"
                           }
             }
-            stage('docker-build.3') {
+            stage('docker-build:2') {
                   agent any
                     steps {
                         script {
@@ -29,12 +29,12 @@ pipeline {
                           } else {
                             TAG = env.BRANCH_NAME
                           }
-                          sh "docker build -t ${IMAGE}:${TAG} ."
+                          sh "docker build -t ${IMAGE} ."
                         }
                     }
               }
 
-              stage('push-dockerhub.6'){
+              stage('push-dockerhub:3'){
                   steps {
                      withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 
@@ -47,22 +47,30 @@ pipeline {
                                 TAG = env.BRANCH_NAME
                                }
                                  sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD}"
-                                 sh "docker tag ${IMAGE}:${TAG} ${env.USERNAME}/${IMAGE}:${TAG}"
-                                 sh "docker push ${env.USERNAME}/${IMAGE}:${TAG}"
+
+                                 sh "docker push ${env.USERNAME}/${IMAGE}"
                                  echo "Image push complete."
                              }
                            }
                      }
             }
 
-            stage('docker-compose:test-local.4') {
+            stage('docker-compose:test-local:4') {
                agent any
                  steps {
                    sh 'docker-compose -f docker-compose.yml up'
 
                  }
             }
-            stage('docker-compose:down-local.4') {
+
+            stage('sleep:5') {
+                 agent any
+                   steps {
+                     sh 'sleep 100'
+                   }
+            }
+
+            stage('docker-compose:down-local:6') {
                  agent any
                    steps {
                      sh 'docker-compose -f docker-compose.yml down'
