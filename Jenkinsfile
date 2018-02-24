@@ -16,21 +16,9 @@ pipeline {
               }
 
               stage ('maven-build') {
-                 String jdkName = jenkinsEnv.jdkFromVersion(buildOs, Jenkins-Master-JDK18)
-                 String mvnName = jenkinsEnv.mvnFromVersion(buildOs, Jenkins-master-MAVEN)
-                 withMaven(jdk: jdkName, maven: mvnName, mavenLocalRepo:"${WORK_DIR}/.repository", options:[
-                 artifactsPublisher(disabled: false),
-                 junitPublisher(ignoreAttachments: false),
-                 findbugsPublisher(disabled: false),
-                 openTasksPublisher(disabled: false),
-                 dependenciesFingerprintPublisher(),
-                 invokerPublisher(),
-                 pipelineGraphPublisher()
-                 ]) {
-                     sh "mvn clean verify -B -U -e -fae -V -Dmaven.test.failure.ignore=true"
-                     sh "mvn clean package"
-                     sh "mvn install"
-                     }
+                def mvnHome = tool 'maven-3'
+                stash 'working-copy'
+                sh "${mvnHome}/bin/mvn clean install"
                 }
 
 
