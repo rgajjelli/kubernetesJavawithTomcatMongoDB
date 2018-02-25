@@ -29,32 +29,12 @@ pipeline {
                           } else {
                             TAG = env.BRANCH_NAME
                           }
-                          sh "docker build -t ${IMAGE} ."
+                          sh "docker build -t ${IMAGE}:latest ."
                         }
                     }
               }
 
-              stage('push-dockerhub:3'){
-                  steps {
-                     withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-
-                           script {
-                             if ( env.BRANCH_NAME == 'master' ) {
-                                 pom = readMavenPom file: 'pom.xml'
-                                 TAG = pom.version
-                                 IMAGE = pom.name
-                                } else {
-                                TAG = env.BRANCH_NAME
-                               }
-                                 sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD}"
-                                 sh "docker tag latest ${env.USERNAME}/${IMAGE}:latest"
-                                 sh "docker push ${env.USERNAME}/${IMAGE}:latest"
-                                 echo "Image push complete."
-                             }
-                           }
-                     }
-            }
-
+          
             stage('docker-compose:test-local:4') {
                agent any
                  steps {
