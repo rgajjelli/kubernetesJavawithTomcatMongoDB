@@ -29,7 +29,7 @@ pipeline {
                           } else {
                             TAG = env.BRANCH_NAME
                           }
-                          sh "docker build -t ${IMAGE} ."
+                          sh "docker build -t ${IMAGE}:1.0 ."
                         }
                     }
               }
@@ -40,7 +40,7 @@ pipeline {
 
                            script {
                                 sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD}"
-                                sh "docker tag ${IMAGE} ${IMAGE}:latest"
+                                sh "docker tag ${env.USERNAME}/${IMAGE}:1.0 ${env.USERNAME}/${IMAGE}:latest"
                                 sh "docker push ${env.USERNAME}/${IMAGE}:latest"
                                 echo "Image push complete."
                              }
