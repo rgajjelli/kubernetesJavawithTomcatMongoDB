@@ -29,7 +29,7 @@ pipeline {
                           } else {
                             TAG = env.BRANCH_NAME
                           }
-                          sh "docker build ${IMAGE}:latest ."
+                          sh "docker build -t ${IMAGE}:latest ."
                         }
                     }
               }
