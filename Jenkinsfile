@@ -40,7 +40,7 @@ pipeline {
 
                            script {
                                 sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD}"
-                                sh "docker tag $containerName:latest ${env.USERNAME}/${IMAGE}:latest"
+                                sh "docker tag ${IMAGE}:latest ${env.USERNAME}/${IMAGE}:latest"
                                 sh "docker push ${env.USERNAME}/${IMAGE}:latest"
                                 echo "Image push complete."
                              }
