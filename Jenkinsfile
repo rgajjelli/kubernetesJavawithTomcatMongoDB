@@ -29,12 +29,24 @@ pipeline {
                           } else {
                             TAG = env.BRANCH_NAME
                           }
-                          sh "docker build -t ${IMAGE}:latest ."
+                          sh "docker build -t ${env.USERNAME}/${IMAGE}:latest ."
                         }
                     }
               }
 
-          
+              stage('push-dockerhub:3'){
+                  steps {
+                     withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+
+                           script {
+                                sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD}"
+                                sh 'docker push docker.io/${env.USERNAME}/${IMAGE}:latest'
+                                echo "Image push complete."
+                             }
+                           }
+                     }
+            }
+
             stage('docker-compose:test-local:4') {
                agent any
                  steps {
