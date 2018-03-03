@@ -13,6 +13,13 @@ pipeline {
 
     stages {
 
+          stage ('scm-checkout:0') {
+                  steps {
+                        git url: 'https://github.com/rgajjelli/kubernetesJavawithTomcatMongoDB.git'
+                        checkout scm
+                        }
+          }
+
             stage ('maven-build:1') {
                     steps {
                           sh "mvn clean install"
