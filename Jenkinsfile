@@ -19,7 +19,6 @@ pipeline {
                           }
             }
             stage('docker-build:2') {
-                  agent any
                     steps {
                         script {
                           if ( env.BRANCH_NAME == 'master' ) {
