@@ -48,7 +48,7 @@ pipeline {
             }
 
             stage('docker-compose:test-local:4') {
-               agent any
+
                  steps {
                    sh 'ls -lrt docker-compose.yml'
                    sh 'docker-compose -f docker-compose.yml up &'
@@ -57,14 +57,14 @@ pipeline {
             }
 
             stage('sleep:5') {
-                 agent any
+
                    steps {
                      sh 'sleep 60'
                    }
             }
 
             stage('docker-compose:down-local:6') {
-                 agent any
+
                    steps {
                      sh 'ls -lrt docker-compose.yml'
                      sh 'docker-compose -f docker-compose.yml down &'
