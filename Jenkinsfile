@@ -3,8 +3,8 @@ pipeline {
     agent any
 
     tools {
-            maven 'maven3'
             jdk 'java8'
+            maven 'maven3'
     }
 
     environment {
@@ -29,7 +29,7 @@ pipeline {
                           } else {
                             TAG = env.BRANCH_NAME
                           }
-                          sh "docker build -t ${IMAGE}:1.0 ."
+                          sh "docker build -t ${IMAGE}:3.0 ."
                         }
                     }
               }
@@ -40,8 +40,8 @@ pipeline {
 
                            script {
                                 sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD}"
-                                sh "docker tag ${IMAGE}:1.0 ${IMAGE}:latest"
-                                sh "docker push ${IMAGE}:latest"
+                                sh "docker tag ${IMAGE}:3.0 ${IMAGE}:4.0"
+                                sh "docker push ${IMAGE}:4.0"
                                 echo "Image push complete."
                              }
                            }
@@ -59,7 +59,7 @@ pipeline {
             stage('sleep:5') {
                  agent any
                    steps {
-                     sh 'sleep 10'
+                     sh 'sleep 1000000'
                    }
             }
 
