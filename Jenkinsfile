@@ -13,16 +13,9 @@ pipeline {
 
     stages {
 
-          stage ('scm-checkout:0') {
-                  steps {
-                        git url: 'https://github.com/rgajjelli/kubernetesJavawithTomcatMongoDB.git'
-                        checkout scm
-                        }
-          }
-
             stage ('maven-build:1') {
                     steps {
-                          sh "mvn clean install"
+                          sh "mvn clean compile package install"
                           }
             }
             stage('docker-build:2') {
@@ -36,7 +29,7 @@ pipeline {
                           } else {
                             TAG = env.BRANCH_NAME
                           }
-                          sh "docker build -t ${IMAGE}:3.0 ."
+                          sh "docker build -t ${IMAGE}:1.0 ."
                         }
                     }
               }
@@ -47,8 +40,8 @@ pipeline {
 
                            script {
                                 sh "docker login -u ${env.USERNAME} -p ${env.PASSWORD}"
-                                sh "docker tag ${IMAGE}:3.0 ${IMAGE}:4.0"
-                                sh "docker push ${IMAGE}:4.0"
+                                sh "docker tag ${IMAGE}:1.0 ${IMAGE}:latest"
+                                sh "docker push ${IMAGE}:latest"
                                 echo "Image push complete."
                              }
                            }
@@ -66,7 +59,7 @@ pipeline {
             stage('sleep:5') {
                  agent any
                    steps {
-                     sh 'sleep 1000000'
+                     sh 'sleep 100000'
                    }
             }
 
