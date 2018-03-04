@@ -5,7 +5,7 @@
 
     <groupId>com.devops</groupId>
     <artifactId>kuberneteswithtomcatmongodb</artifactId>
-    <version>3.0</version>
+    <version>${version.number}</version>
     <packaging>war</packaging>
     <name>kuberneteswithtomcatmongodb</name>
     <description>Spring Boot with Kubernetes and MongoDB Containers</description>
@@ -22,6 +22,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <docker.image.prefix>gajjelli</docker.image.prefix>
+        <version.number>${git.commit.time}.${git.commit.id.abbrev}</version.number>
     </properties>
 
     <dependencies>
@@ -78,6 +79,25 @@
                             <include>${project.build.finalName}.war</include>
                         </resource>
                     </resources>
+                </configuration>
+            </plugin>
+              <!-- use the git-commit-id-plugin. The plugin reads the commit hash and the commit timestamp from the .git directory and makes it available in the pom via Maven properties -->
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dateFormat>yyyyMMdd-HHmmss</dateFormat><!--  human-readable part of the version number -->
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <generateGitPropertiesFile>false</generateGitPropertiesFile><!-- somehow necessary. otherwise the variables are not available in the pom -->
                 </configuration>
             </plugin>
         </plugins>
