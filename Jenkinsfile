@@ -15,6 +15,14 @@ pipeline {
 
             stage ('maven-build:1') {
                     steps {
+
+                          print "DEBUG: parameter isCheck = " + isCheck
+                          print "DEBUG: parameter BUILD_NUMBER = ${BUILD_NUMBER}"
+
+                          if (params.isCheck) {
+                                print "DEBUG: parameter if condition .. BUILD_NUMBER = ${BUILD_NUMBER}"
+                          }
+
                           sh "mvn clean compile package install"
                           }
             }
